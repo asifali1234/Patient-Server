@@ -17,8 +17,8 @@ app.use('/favicon.ico',(req,res)=>{
 	res.sendStatus(204);
 });
 
-app.post('/login',(req,res)=>{
-
+app.post('/checkUserexists',(req,res)=>{
+	console.log(req.body);
 	sigin.newUser(db,req.body.GoogleID).then((docs)=>{
 		res.send(docs);
 	}).catch((err)=>{

@@ -9,16 +9,16 @@ const newUser = (db,user) =>{
 			//console.log(docs);
 			if(!err){
 				if(Object.keys(docs).length!=0) {
-					docs[0].registered = true;
-					resolve(docs);
+					if(docs[0].verified==true){
+						docs[0].registered = true;
+						resolve(docs[0]);
+					}
+					else{
+						resolve({registered:false});
+					}
 				}
 				else{
-					console.log("here");
-					db.users.save({googleid:user},(err,docs)=>{
-						console.log(docs);
-						docs.registered = false;
-						resolve(docs);
-					})
+					resolve({registered:false});
 				}
 			}
 			else{
