@@ -1,11 +1,9 @@
 /**
  * Created by aravind on 10/11/17.
  */
-const mongojs = require('mongojs');
-const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors']);
-const newUser = (user) =>{
+
+const newUser = (db,user) =>{
 	//check in db for user is already present
-	console.log(db.users);
 	return new Promise((resolve,reject)=>{
 		db.users.find({googleid:user},(err,docs) =>{
 			//console.log(docs);

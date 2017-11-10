@@ -17,7 +17,7 @@ app.use('/favicon.ico',(req,res)=>{
 app.post('/login',(req,res)=>{
 	console.log(req.body.googleid);
 	//console.log(db.users.find());
-	sigin.newUser(req.body.googleid).then((docs)=>{
+	sigin.newUser(db,req.body.googleid).then((docs)=>{
 		res.send(docs);
 	});
 
