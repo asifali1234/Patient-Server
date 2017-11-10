@@ -18,9 +18,8 @@ app.use('/favicon.ico',(req,res)=>{
 });
 
 app.post('/login',(req,res)=>{
-	console.log(req.body.googleid);
-	//console.log(db.users.find());
-	sigin.newUser(db,req.body.googleid).then((docs)=>{
+
+	sigin.newUser(db,req.body.GoogleID).then((docs)=>{
 		res.send(docs);
 	}).catch((err)=>{
 		slack.bug(err);
@@ -30,7 +29,7 @@ app.post('/login',(req,res)=>{
 
 app.post('/mobileVerification',(req,res)=>{
 	console.log(req.body.number);
-	otp.otpverification(db,req.body.number,req.body.id).then((succ)=>{
+	otp.otpverification(db,req.body.number,req.body.GoogleID).then((succ)=>{
 		res.send(succ);
 	}).catch((Err)=>{
 		slack.bug(Err);
@@ -39,7 +38,7 @@ app.post('/mobileVerification',(req,res)=>{
 });
 
 app.post('/verify',(req,res)=>{
-	otp.verify(db,req.body.googleid,req.body.otpno).then((succ)=>{
+	otp.verify(db,req.body.GoogleID,req.body.otpno).then((succ)=>{
 		res.send(succ);
 	}).catch((err)=>{
 		slack.bug(err);
@@ -48,7 +47,7 @@ app.post('/verify',(req,res)=>{
 });
 
 app.post('/patientDetails',(req,res)=>{
-	patientdetails.details(db,req.body.googleid,req.body).then((succ)=>{
+	patientdetails.details(db,req.body.GoogleID,req.body).then((succ)=>{
 		res.send(succ);
 	}).catch((err)=>{
 		slack.bug(err);
