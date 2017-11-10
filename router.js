@@ -10,6 +10,8 @@ const app = express();
 const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors']);
 
 const sigin = require('./service/signin.js');
+const otp = require('./service/otp.js');
+
 
 app.use('/favicon.ico',(req,res)=>{
 	res.sendStatus(204);
@@ -24,6 +26,25 @@ app.post('/login',(req,res)=>{
 		slack.bug(err);
 		res.send("error");
 	});
+});
+
+app.post('/mobileVerification',(req,res)=>{
+	console.log(req.body.number);
+	otp.otpverification(db,req.body.number,req.body.id).then((succ)=>{
+		res.send(succ);
+	}).catch((Err)=>{
+		slack.bug(Err);
+		res.send(Err);
+	});
+});
+
+app.post('/verify',(req,res)=>{
+	otp.verify(db,req.body.googleid,req.body.otpno).then((succ)=>{
+		res.send(succ);
+	}).catch((err)=>{
+		slack.bug(err);
+		res.send(err);
+	})
 });
 
 module.exports = app;
