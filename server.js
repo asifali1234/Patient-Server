@@ -14,10 +14,7 @@ app.use((err,req,res,next)=>{
 	console.log(err);
 });
 
-app.use((req,res)=>{
-	slack.bug("404 error"+req.url);
-	res.send("404 error");
-});
+
 
 
 app.use(bodyParser.urlencoded({extended: false}));
