@@ -4,6 +4,7 @@
 
 const express = require('express');
 const mongojs = require('mongojs');
+const slack = require('slack-notify')("https://hooks.slack.com/services/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");
 const app = express();
 
 const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors']);
@@ -19,8 +20,10 @@ app.post('/login',(req,res)=>{
 	//console.log(db.users.find());
 	sigin.newUser(db,req.body.googleid).then((docs)=>{
 		res.send(docs);
+	}).catch((err)=>{
+		slack.bug(err);
+		res.send("error");
 	});
-
 });
 
 module.exports = app;
