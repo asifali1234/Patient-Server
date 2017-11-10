@@ -11,7 +11,7 @@ const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack
 
 const sigin = require('./service/signin.js');
 const otp = require('./service/otp.js');
-
+const patientdetails = require('./service/updateDetails.js');
 
 app.use('/favicon.ico',(req,res)=>{
 	res.sendStatus(204);
@@ -45,6 +45,15 @@ app.post('/verify',(req,res)=>{
 		slack.bug(err);
 		res.send(err);
 	})
+});
+
+app.post('/patientDetails',(req,res)=>{
+	patientdetails.details(db,req.body.googleid,req.body).then((succ)=>{
+		res.send(succ);
+	}).catch((err)=>{
+		slack.bug(err);
+		res.send(err);
+	});
 });
 
 module.exports = app;
