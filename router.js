@@ -7,11 +7,13 @@ const mongojs = require('mongojs');
 const slack = require('slack-notify')("https://hooks.slack.com/services/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");
 const app = express();
 
-const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors']);
+const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors','token']);
 
-const sigin = require('./service/signin.js');
+const sigin = require('./service/checkUserId.js');
 const otp = require('./service/otp.js');
-const patientdetails = require('./service/updateDetails.js');
+const patientdetails = require('./service/patientDetails.js');
+const doctordetails = require('./service/doctordetails.js');
+const booking = require('./service/booking.js');
 
 app.use('/favicon.ico',(req,res)=>{
 	res.sendStatus(204);
@@ -54,6 +56,25 @@ app.post('/patientDetails',(req,res)=>{
 		slack.bug(err);
 		res.send(err);
 	});
+});
+
+app.get('/doctorDetails',(req,res)=>{
+	doctordetails.doctordetails(db).then((docs)=>{
+		res.send(docs);
+	}).catch((err)=>{
+		slack.bug(err);
+		res.send("error");
+	})
+});
+
+app.post('/booking',(req,res)=>{
+	console.log(req.body);
+	booking.booking(db,req.body.googleid,req.body.doctorid,req.body.date).then((succ)=>{
+		res.send(succ);
+	}).catch((err)=>{
+		slack.bug(err);
+		res.send(err);
+	})
 });
 
 module.exports = app;
