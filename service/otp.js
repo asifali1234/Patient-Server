@@ -6,9 +6,10 @@ let pythonshell = require('python-shell');
 let otpverification = (db,mobilenumber,id)=>{
 		return new Promise((resolve,reject)=>{
 			let random = Math.ceil(Math.random()*10000);
-			db.users.update({googleid:id},{$set:{mobilenumber:mobilenumber,otpno:random,verified:false}},function (err) {
+			db.users.update({googleid:id},{$set:{mobilenumber:mobilenumber,otpno:random,verified:false}},function (err,docs) {
 				if(!err){
 					console.log("here");
+					console.log(docs);
 					let options = {
 						args:["Your mobile verification code is"+random,mobilenumber]
 					};
@@ -38,7 +39,7 @@ let otpverify = (db,googleid,otpno)=>{
 			if(docs[0].otpno==otpno){
 				db.users.update({googleid:googleid},{$set:{verified:true}},(err,docs)=>{
 					if(!err){
-						resolve("sucess");
+						resolve(true);
 					}
 					else{
 						reject(err);
@@ -46,7 +47,7 @@ let otpverify = (db,googleid,otpno)=>{
 				})
 			}
 			else{
-				resolve("Wrong otp code");
+				resolve(false);
 			}
 		})
 	}).then((succ)=>{
