@@ -7,7 +7,7 @@ const mongojs = require('mongojs');
 const slack = require('slack-notify')("https://hooks.slack.com/services/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");
 const app = express();
 
-const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors','token']);
+const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors','token','appointements']);
 
 const sigin = require('./service/checkUserId.js');
 const otp = require('./service/otp.js');

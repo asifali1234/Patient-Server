@@ -4,24 +4,14 @@
 
 let bookforDoctor = (db,userid,doctorid,date)=>{
 	let currdate = new Date().getDate()+""+new Date().getMonth()+""+new Date().getFullYear();
-	let booking = {
-		date:date,
-		doctorid:doctorid
-	};
+	console.log(currdate);
 	return new Promise((resolve,reject)=>{
-		db.token.find({doctorid:doctorid},(err,docs)=>{
-			if(docs.length==0){
-				db.token.save({doctorid:doctorid,date:date,tokenno:1},(err)=>{
+		db.token.findAndModify({query:{doctorid:doctorid,date:date},update:{$inc:{tokenno:1}},upsert:true,new:true},(err,docs)=>{
+			if(!err){
+				let token =docs.tokenno;
+				db.appointements.save({googleid:userid,doctorid:doctorid,date:date,tokenno:token},(err)=>{
 					if(!err){
-						booking.tokenno = 1;
-						db.users.update({googleid:userid},{$push:{booking:booking}},(err)=>{
-							if(!err){
-								resolve(booking);
-							}
-							else{
-								reject(err);
-							}
-						})
+						resolve(docs);
 					}
 					else{
 						reject(err);
@@ -29,38 +19,13 @@ let bookforDoctor = (db,userid,doctorid,date)=>{
 				});
 			}
 			else{
-				if(docs[0].date==currdate){
-					let tokenno = docs[0].tokenno+1;
-					booking.tokenno = tokenno;
-					db.token.update({doctorid:doctorid},{$inc:{tokenno:1}},(err,docs)=>{
-						if(!err){
-							db.users.update({googleid:userid},{$push:{booking:booking}},(err)=>{
-								if(!err){
-									resolve(booking);
-								}
-								else{
-									reject(err);
-								}
-							})
-						}
-						else{
-							reject(err);
-						}
-					});
-				}
-				else{
-					booking.tokenno =1;
-					db.token.update({doctorid:doctorid},{date:date,tokenno:1},(err)=>{
-						if(!err){
-							resolve(booking);
-						}
-						else{
-							reject(err);
-						}
-					})
-				}
+				reject(err);
 			}
 		});
+	}).then((docs)=>{
+		return docs;
+	}).catch((err)=>{
+		return err;
 	});
 };
 
