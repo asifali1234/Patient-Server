@@ -11,7 +11,7 @@ let otpverification = (db,mobilenumber,id)=>{
 					console.log("here");
 					console.log(docs);
 					let options = {
-						args:["Your mobile verification code is"+random,parseInt(mobilenumber)]
+						args:["Your mobile verification code is"+random,mobilenumber]
 					};
 					pythonshell.run('sendSMS.py',options,(err,results)=>{
 							if(!err){

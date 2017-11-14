@@ -33,6 +33,7 @@ app.post('/checkUserexists',(req,res)=>{
 
 app.post('/mobileVerification',(req,res)=>{
 	console.log(req.body.mobilenumber);
+	slack.bug(req.body.mobilenumber);
 	console.log(typeof (req.body.googleid));
 	otp.otpverification(db,req.body.mobilenumber,req.body.googleid).then((succ)=>{
 		res.send(succ);
