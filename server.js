@@ -9,10 +9,7 @@ const router = require('./router.js');
 
 const slack = require('slack-notify')("https://hooks.slack.com/services/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");
 
-app.use((err,req,res,next)=>{
-	slack.bug(err);
-	console.log(err);
-});
+
 
 
 
@@ -20,7 +17,11 @@ app.use((err,req,res,next)=>{
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-
+app.use(function(req, res, next) {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+	next();
+});
 app.use('/',router);
 
 app.listen(3000,()=>{
