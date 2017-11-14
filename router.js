@@ -9,11 +9,13 @@ const app = express();
 
 const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors','token','appointements']);
 
+
 const sigin = require('./service/checkUserId.js');
 const otp = require('./service/otp.js');
 const patientdetails = require('./service/patientDetails.js');
 const doctordetails = require('./service/doctordetails.js');
 const booking = require('./service/booking.js');
+const deletetoken = require('./service/deleteAppointement.js');
 
 app.use('/favicon.ico',(req,res)=>{
 	res.sendStatus(204);
@@ -77,6 +79,14 @@ app.post('/booking',(req,res)=>{
 	})
 });
 
+app.post('/delete',(req,res)=>{
+	deletetoken.deleteappointement(db,req.body.googleid,req.body.date,req.body.doctorid,req.body.tokenno).
+		then(()=>{
+		res.send(true);
+	}).catch((err)=>{
+		res.send(err);
+	});
+});
 
 
 module.exports = app;
