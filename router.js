@@ -16,6 +16,8 @@ const patientdetails = require('./service/patientDetails.js');
 const doctordetails = require('./service/doctordetails.js');
 const booking = require('./service/booking.js');
 const deletetoken = require('./service/deleteAppointement.js');
+const appointements = require('./service/appointements.js');
+
 
 app.use('/favicon.ico',(req,res)=>{
 	res.sendStatus(204);
@@ -85,6 +87,24 @@ app.post('/delete',(req,res)=>{
 		then(()=>{
 		res.send(true);
 	}).catch((err)=>{
+		res.send(err);
+	});
+});
+
+app.post('/currentAppointements',(req,res)=>{
+	appointements.currAppointements(db,req.body.googleid).then((docs)=>{
+		res.send(docs);
+	}).catch((err)=>{
+		slack.bug(err);
+		res.send(err);
+	});
+});
+
+app.post('/previousAppointements',(req,res)=>{
+	appointements.prevAppointements(db,req.body.googleid).then((docs)=>{
+		res.send(docs);
+	}).catch((err)=>{
+		slack.bug(err);
 		res.send(err);
 	});
 });
