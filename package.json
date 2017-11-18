@@ -4,7 +4,8 @@
   "description": "Application for patient doctor appointements",
   "main": "server.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "node test.js",
+    "start": "node server.js"
   },
   "keywords": [
     "node",

@@ -31,7 +31,7 @@ var event = {
 };
 
 let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=>{
-	let currdate = new Date().getDate()+""+new Date().getMonth()+""+new Date().getFullYear();
+	let currdate = new Date().getDate()+"/"+new Date().getMonth()+"/"+new Date().getFullYear();
 	console.log(currdate);
 	return new Promise((resolve,reject)=>{
 		db.token.findAndModify({query:{doctorid:doctorid,date:date},update:{$inc:{tokenno:1}},upsert:true,new:true},(err,docs)=>{
