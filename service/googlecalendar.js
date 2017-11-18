@@ -13,17 +13,17 @@ var event = {
 	'description': 'A chance to hear more about Google\'s developer products.',
 	'start': {
 		'dateTime': new Date(),
-		'timeZone': 'America/Los_Angeles',
+		'timeZone': 'Asia/Calcutta',
 	},
 	'end': {
-		'dateTime': new Date(2017,11,15,2,33,30,0),
-		'timeZone': 'America/Los_Angeles',
+		'dateTime': new Date(2017,11,19,2,33,30,0),
+		'timeZone': 'Asia/Calcutta',
 	},
 	'recurrence': [
 		'RRULE:FREQ=DAILY;COUNT=2'
 	],
 	'attendees': [
-		{'email': 'ashwinkailas@gmail.com'},
+		{'email': 'aravindcranjan54@gmail.com'},
 	],
 	'reminders': {
 		'useDefault': false,
