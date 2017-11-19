@@ -46,7 +46,7 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
 					    event.attendees.push({'email':patientemail});
 					    let endtime = token*15;
 					    console.log(Math.floor(endtime/60));
-					    if (Math.ceil(endtime/60)>0){
+					    if (Math.floor(endtime/60)>0){
                             booktime[0] = booktime[0]+Math.floor(endtime/60);
                             endtime = endtime - Math.floor(endtime/60)*60;
                             if(booktime[1]+endtime>=60){
