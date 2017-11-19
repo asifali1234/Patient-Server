@@ -2,6 +2,8 @@
  * Created by aravind on 10/11/17.
  */
 
+//Libraries Used
+
 const express = require('express');
 const mongojs = require('mongojs');
 const slack = require('slack-notify')("https://hooks.slack.com/services/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");
@@ -9,6 +11,8 @@ const app = express();
 
 const db = mongojs('mongodb://carehack:carehack@ds155695.mlab.com:55695/carehack',['users','doctors','token','appointements']);
 
+
+//Custom made files
 
 const sigin = require('./service/checkUserId.js');
 const otp = require('./service/otp.js');
@@ -23,6 +27,8 @@ app.use('/favicon.ico',(req,res)=>{
 	res.sendStatus(204);
 });
 
+//Check if the user is present.If Present return user details..else proceed to patient registeration
+
 app.post('/checkUserexists',(req,res)=>{
 	console.log(req.body);
 	sigin.newUser(db,req.body.googleid).then((docs)=>{
@@ -33,9 +39,10 @@ app.post('/checkUserexists',(req,res)=>{
 	});
 });
 
+//Sending Mobile otp using sendSMS.py file....Way2sms is the client.
+
 app.post('/mobileVerification',(req,res)=>{
 	console.log(req.body.mobilenumber);
-	slack.bug(req.body.mobilenumber);
 	console.log(typeof (req.body.googleid));
 	otp.otpverification(db,req.body.mobilenumber,req.body.googleid).then((succ)=>{
 		res.send(succ);
@@ -44,6 +51,9 @@ app.post('/mobileVerification',(req,res)=>{
 		res.send(Err);
 	});
 });
+
+
+//Verify the otp no send and complete patient registeration
 
 app.post('/verify',(req,res)=>{
 	otp.verify(db,req.body.googleid,req.body.otpno).then((succ)=>{
@@ -54,6 +64,8 @@ app.post('/verify',(req,res)=>{
 	})
 });
 
+//save patient details like his history
+
 app.post('/patientDetails',(req,res)=>{
 	patientdetails.details(db,req.body.googleid,req.body).then((succ)=>{
 		res.send(succ);
@@ -63,6 +75,8 @@ app.post('/patientDetails',(req,res)=>{
 	});
 });
 
+//Return doctors registered with number of appointements for each date
+
 app.get('/doctorDetails',(req,res)=>{
 	doctordetails.doctordetails(db).then((docs)=>{
 		res.send(docs);
@@ -71,6 +85,8 @@ app.get('/doctorDetails',(req,res)=>{
 		res.send("error");
 	})
 });
+
+//Booking link...A googlecalendar api is called which will set the event for google calendar and returns the calendarid along with token number and date
 
 app.post('/booking',(req,res)=>{
 	console.log(req.body);
@@ -82,6 +98,8 @@ app.post('/booking',(req,res)=>{
 	})
 });
 
+//delete ...can delete appointement...returns true if all the required changes are done
+
 app.post('/delete',(req,res)=>{
 	deletetoken.deleteappointement(db,req.body.googleid,req.body.date,req.body.doctorid,req.body.tokenno).
 		then(()=>{
@@ -91,6 +109,8 @@ app.post('/delete',(req,res)=>{
 	});
 });
 
+//return upcoming Appointements
+
 app.post('/currentAppointements',(req,res)=>{
 	appointements.currAppointements(db,req.body.googleid).then((docs)=>{
 		res.send(docs);
@@ -99,6 +119,8 @@ app.post('/currentAppointements',(req,res)=>{
 		res.send(err);
 	});
 });
+
+//return Previous Appointements
 
 app.post('/previousAppointements',(req,res)=>{
 	appointements.prevAppointements(db,req.body.googleid).then((docs)=>{
