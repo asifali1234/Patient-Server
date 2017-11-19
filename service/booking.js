@@ -45,11 +45,13 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
 					    event.description = "Your token no is"+token+"Please don\'t forget about appointement!!";
 					    event.attendees.push({'email':patientemail});
 					    let endtime = token*15;
+					    console.log(endtime);
 					    console.log(Math.floor(endtime/60));
 					    if (Math.floor(endtime/60)>0){
                             booktime[0] = booktime[0]+Math.floor(endtime/60);
-                            endtime = endtime - Math.floor(endtime/60)*60;
-                            if(booktime[1]+endtime>=60){
+                            endtime = endtime - (Math.floor(endtime/60)*60);
+                            console.log(endtime);
+                            if((booktime[1]+endtime)>=60){
                                 booktime[0]++;
                                 endtime = endtime-60;
                                 booktime[1] = booktime[1]+endtime;
@@ -59,7 +61,7 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
                             }
 					    }
 					    else{
-					        if(booktime[1]+endtime>=60){
+					        if((booktime[1]+endtime)>=60){
 					            booktime[0]++;
 					            endtime = endtime -60;
 					            booktime[1] = booktime[1]+endtime;
@@ -68,6 +70,7 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
 					            booktime[1] = booktime[1]+endtime;
                             }
                         }
+
                         console.log(booktime);
 					    event.end.dateTime = new Date(bookdate[2],bookdate[1],bookdate[0],booktime[0],booktime[1],0,0);
 					    cal.Events.insert('primary',event).then((resp)=>{

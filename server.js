@@ -3,6 +3,7 @@
  */
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
 
 const router = require('./router.js');
@@ -10,9 +11,8 @@ const router = require('./router.js');
 const slack = require('slack-notify')("https://hooks.slack.com/services/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");
 
 
-
-
-
+app.set('public',path.join(__dirname,'public'));
+app.use(express.static(path.join(__dirname,'public')));
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
