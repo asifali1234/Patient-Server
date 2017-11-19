@@ -41,8 +41,8 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
 				let token =docs.tokenno;
 				db.appointements.save({googleid:userid,doctorid:doctorid,date:date,tokenno:token,doctorName:doctorName},(err)=>{
 					if(!err){
-						event.summary = "Appointement with"+doctorName;
-					    event.description = "Your token no is"+token+"Please don\'t forget about appointement!!";
+						event.summary = "Appointement with\t"+doctorName;
+					    event.description = "Your token no is\t"+token+"Please don\'t forget about appointement!!";
 					    event.attendees.push({'email':patientemail});
 					    let endtime = token*15;
 					    console.log(endtime);
@@ -74,6 +74,7 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
                         console.log(booktime);
 					    event.end.dateTime = new Date(bookdate[2],bookdate[1],bookdate[0],booktime[0],booktime[1],0,0);
 					    cal.Events.insert('primary',event).then((resp)=>{
+					    	docs.doctorName = doctorName;
 					        docs.calendarid = resp.id;
 					        resolve(docs);
                         }).catch((err)=>{
