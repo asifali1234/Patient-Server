@@ -32,7 +32,10 @@ var event = {
 
 let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=>{
 	let currdate = new Date().getDate()+"/"+new Date().getMonth()+"/"+new Date().getFullYear();
-	console.log(currdate);
+	let bookdate = date.split('/');
+	let booktime = starttime.split(':');
+	booktime[0] = parseInt(booktime[0]);
+	booktime[1] = parseInt(booktime[1]);
 	return new Promise((resolve,reject)=>{
 		db.token.findAndModify({query:{doctorid:doctorid,date:date},update:{$inc:{tokenno:1}},upsert:true,new:true},(err,docs)=>{
 			if(!err){
@@ -41,7 +44,31 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
 					if(!err){
 					    event.description = "Your token no is"+token+"Please don\'t forget about appointement!!";
 					    event.attendees.push({'email':patientemail});
-					    event.end.dateTime = new Date();
+					    let endtime = token*15;
+					    console.log(Math.floor(endtime/60));
+					    if (Math.ceil(endtime/60)>0){
+                            booktime[0] = booktime[0]+Math.floor(endtime/60);
+                            endtime = endtime - Math.floor(endtime/60)*60;
+                            if(booktime[1]+endtime>=60){
+                                booktime[0]++;
+                                endtime = endtime-60;
+                                booktime[1] = booktime[1]+endtime;
+                            }
+                            else{
+                                booktime[1] = booktime[1]+endtime;
+                            }
+					    }
+					    else{
+					        if(booktime[1]+endtime>=60){
+					            booktime[0]++;
+					            endtime = endtime -60;
+					            booktime[1] = booktime[1]+endtime;
+                            }
+                            else{
+					            booktime[1] = booktime[1]+endtime;
+                            }
+                        }
+					    event.end.dateTime = new Date(bookdate[2],bookdate[1],bookdate[0],booktime[0],booktime[1],0,0);
 					    cal.Events.insert('primary',event).then((resp)=>{
 					        docs.calendarid = resp.id;
 					        resolve(docs);

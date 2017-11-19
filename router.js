@@ -74,7 +74,7 @@ app.get('/doctorDetails',(req,res)=>{
 
 app.post('/booking',(req,res)=>{
 	console.log(req.body);
-	booking.booking(db,req.body.googleid,req.body.doctorid,req.body.date,req.body.doctorName).then((succ)=>{
+	booking.booking(db,req.body.googleid,req.body.doctorid,req.body.date,req.body.doctorName,req.body.email,req.body.time).then((succ)=>{
 		res.send(succ);
 	}).catch((err)=>{
 		slack.bug(err);
