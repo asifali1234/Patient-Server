@@ -1,6 +1,10 @@
 /**
  * Created by aravind on 15/11/17.
  */
+
+
+//File created as Part of Testing google calendar api
+
 const config = require('../settings.js');
 const calendarapi = require('node-google-calendar');
 

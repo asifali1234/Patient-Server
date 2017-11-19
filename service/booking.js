@@ -8,7 +8,6 @@ const config = require('../settings.js');
 let cal = new calendarapi(config);
 
 var event = {
-    'summary': 'Doctor Appointement',
     'start': {
         'dateTime': new Date(),
         'timeZone': 'Asia/Calcutta',
@@ -42,6 +41,7 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
 				let token =docs.tokenno;
 				db.appointements.save({googleid:userid,doctorid:doctorid,date:date,tokenno:token,doctorName:doctorName},(err)=>{
 					if(!err){
+						event.summary = "Appointement with"+doctorName;
 					    event.description = "Your token no is"+token+"Please don\'t forget about appointement!!";
 					    event.attendees.push({'email':patientemail});
 					    let endtime = token*15;
