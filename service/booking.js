@@ -68,6 +68,7 @@ let bookforDoctor = (db,userid,doctorid,date,doctorName,patientemail,starttime)=
 					            booktime[1] = booktime[1]+endtime;
                             }
                         }
+                        console.log(booktime);
 					    event.end.dateTime = new Date(bookdate[2],bookdate[1],bookdate[0],booktime[0],booktime[1],0,0);
 					    cal.Events.insert('primary',event).then((resp)=>{
 					        docs.calendarid = resp.id;
